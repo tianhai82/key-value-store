@@ -1,4 +1,4 @@
-const store = {};
+let store = {};
 
 export function setValue(key, value) {
   const now = new Date();
@@ -34,4 +34,8 @@ export function getValue(key, timestamp) {
     }
   }
   return Promise.reject(new Error('no value found before provided timestamp'));
+}
+
+export function reset() {
+  store = {};
 }

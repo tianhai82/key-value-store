@@ -24,4 +24,3 @@ Base URL: https://object-wywr5ucsda-uc.a.run.app/object
 # Database
 - Mongodb hosted in https://cloud.mongodb.com
 
----

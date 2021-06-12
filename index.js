@@ -1,25 +1,27 @@
 /* eslint-disable import/extensions */
 import express from 'express';
-import isValidTimestamp from './isValidTimestamp.js';
-// import { getValue, setValue } from './mongostore.js';
-import { getValue, setValue } from './memstore.js';
+import MongoKVStore from './mongostore.js';
+// import KVStore from './memstore.js';
 
 const app = express();
 const port = 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+const userID = process.env.DB_USER_ID;
+const password = process.env.DB_PASSWORD;
+const server = process.env.DB_CLUSTER;
+const db = process.env.DB;
+const col = process.env.DB_COL;
+const store = new MongoKVStore(userID, password, server, db, col);
+store.connect();
+// const store = new KVStore();
+
 app.get('/object/:key', async (req, res) => {
   const { timestamp } = req.query;
   const { params } = req;
 
-  if (timestamp != null && !isValidTimestamp(timestamp)) {
-    console.log(`invalid timestamp for key: ${params.key}, timestamp: ${timestamp}.`);
-    res.sendStatus(404);
-    return;
-  }
-
-  getValue(params.key, +timestamp).then((obj) => {
+  store.getValue(params.key, +timestamp).then((obj) => {
     res.json(obj);
   }).catch((e) => {
     // log request error
@@ -40,7 +42,7 @@ app.post('/object', (req, res) => {
     return;
   }
 
-  setValue(keys[0], body[keys[0]])
+  store.setValue(keys[0], body[keys[0]])
     .then((out) => {
       res.json(out);
     }).catch((e) => {

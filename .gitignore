@@ -12,3 +12,5 @@ node_modules/
 
 # Optional eslint cache
 .eslintcache
+launch.json
+.env

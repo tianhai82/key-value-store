@@ -21,7 +21,8 @@ app.get('/object/:key', async (req, res) => {
   const { timestamp } = req.query;
   const { params } = req;
 
-  store.getValue(params.key, +timestamp).then((obj) => {
+  const t = timestamp == null ? timestamp : +timestamp;
+  store.getValue(params.key, t).then((obj) => {
     res.json(obj);
   }).catch((e) => {
     // log request error
